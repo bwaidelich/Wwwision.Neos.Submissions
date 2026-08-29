@@ -1,0 +1,4 @@
+privilegeTargets:
+  'Neos\Neos\Security\Authorization\Privilege\ModulePrivilege':
+    'Wwwision.Neos.Submissions.Module:SubmissionsModule':
+      matcher: 'administration/submissions'

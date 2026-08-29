@@ -1,0 +1,5 @@
+Neos:
+  Flow:
+    object:
+      includeClasses:
+        'Wwwision.Neos.Submissions': ['Wwwision\\Neos\\Submissions\\(Adapter|Controller|Factory|Action|Command)\\.*']

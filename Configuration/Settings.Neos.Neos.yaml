@@ -1,0 +1,17 @@
+Neos:
+  Neos:
+    modules:
+      'administration':
+        submodules:
+          'submissions':
+            label: 'Submissions'
+            controller: 'Wwwision\Neos\Submissions\Controller\SubmissionsModuleController'
+            description: 'Manage form submissions'
+            icon: 'icon-check'
+            additionalResources:
+              styleSheets:
+                - 'resource://Wwwision.Neos.ModuleComponents/Public/Styles/module.css'
+                - 'resource://Wwwision.Neos.Submissions/Public/Styles/module.css'
+              javaScripts:
+                - 'resource://Wwwision.Neos.ModuleComponents/Public/Scripts/module.js'
+                - 'resource://Wwwision.Neos.Submissions/Public/Scripts/module.js'

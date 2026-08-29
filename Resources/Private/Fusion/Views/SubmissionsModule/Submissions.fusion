@@ -1,0 +1,64 @@
+Wwwision.Neos.Submissions.SubmissionsModuleController.submissions = NeosBE:Module {
+  translateContent = true
+  content = afx`
+    <Neos.Fusion.Form:Form attributes.class="filter" form.data.filter={Json.parse(Json.stringify(filter))} form.method="GET" form.target.action="submissions">
+      <Neos.Fusion.Form:Hidden field.name="preset" field.value={preset.id} />
+      <Neos.Fusion.Form:Neos.BackendModule.FieldContainer field.name="filter[formId]" attributes.class="neos-span3 neos-select">
+        <Neos.Fusion.Form:Select attributes.onchange="this.form.submit()">
+          <Neos.Fusion.Form:Select.Option option.value="">
+            <NeosBE:Translate id="filter.formId.all" arguments={[preset.title]} />
+          </Neos.Fusion.Form:Select.Option>
+          <Neos.Fusion:Loop items={forms} itemName="form">
+            <Neos.Fusion.Form:Select.Option option.value={form.id} content={form.label} attributes.title={'ID: ' + form.id} />
+          </Neos.Fusion:Loop>
+        </Neos.Fusion.Form:Select>
+      </Neos.Fusion.Form:Neos.BackendModule.FieldContainer>
+      <Neos.Fusion.Form:Neos.BackendModule.FieldContainer field.name="filter[searchTerm]" attributes.class="neos-span3">
+        <Neos.Fusion.Form:Input attributes.type="search" attributes.placeholder="LLL:filter.searchTerm.placeholder" />
+      </Neos.Fusion.Form:Neos.BackendModule.FieldContainer>
+      <div class="filter-submit">
+        <NeosBE:Button isPrimary={true} content="LLL:filter.apply" />
+      </div>
+    </Neos.Fusion.Form:Form>
+    <p @if.hasNoSubmissions={submissions.empty}><i>LLL:noSubmissionsMatchFilter</i></p>
+    <Neos.Fusion:Fragment @if.hasSubmissions={!submissions.empty}>
+      <h2><NeosBE:Translate id="numberOfSubmissionsMatchFilter" quantity={submissions.totalCount} arguments={[submissions.totalCount]} /></h2>
+      <NeosBE:Table>
+        <NeosBE:Table.Head>
+          <NeosBE:Table.Row>
+            <NeosBE:Table.HeaderCell attributes.style="width: 1em"/>
+            <NeosBE:Table.HeaderCell content="LLL:submission.label"/>
+            <NeosBE:Table.HeaderCell content="LLL:submission.state"/>
+            <NeosBE:Table.HeaderCell content="LLL:submission.creationDate"/>
+            <NeosBE:Table.HeaderCell/>
+          </NeosBE:Table.Row>
+        </NeosBE:Table.Head>
+        <NeosBE:Table.Body>
+          <Neos.Fusion:Loop items={submissions} itemName="submission">
+            <NeosBE:Table.ClickableRow target.action="showRecord" target.arguments={{id: submission.id.value}}>
+              <NeosBE:Table.Cell>
+                <NeosBE:Icon icon="cube"/>
+              </NeosBE:Table.Cell>
+              <NeosBE:Table.Cell>
+                {submission.label}
+              </NeosBE:Table.Cell>
+              <NeosBE:Table.Cell>
+              </NeosBE:Table.Cell>
+              <NeosBE:Table.Cell>
+              </NeosBE:Table.Cell>
+              <NeosBE:Table.ActionCell>
+                <NeosBE:Button icon="eye" action="showRecord" arguments={{id: submission.id.value}}/>
+              </NeosBE:Table.ActionCell>
+            </NeosBE:Table.ClickableRow>
+          </Neos.Fusion:Loop>
+        </NeosBE:Table.Body>
+      </NeosBE:Table>
+      <NeosBE:Pagination numberOfResults={submissions.totalCount} resultsPerPage={pagination.resultsPerPage} />
+    </Neos.Fusion:Fragment>
+  `
+
+  footer = afx`
+    <NeosBE:Button action="index" content="LLL:back" icon="arrow-left" />
+    <NeosBE:Button action="export" arguments={{preset: 'test'}} renderer.linkButton.renderer.href.format="csv" content="LLL:csvExport" attributes.download="yoo.csv" icon="download" />
+  `
+}

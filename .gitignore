@@ -1,0 +1,6 @@
+.phpunit.cache
+.php-cs-fixer.cache
+composer.lock
+phpstan.neon
+vendor
+Packages

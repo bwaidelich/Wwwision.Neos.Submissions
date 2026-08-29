@@ -1,0 +1,71 @@
+{
+    "description": "Form submission management for Neos",
+    "type": "neos-package",
+    "name": "wwwision/neos-submissions",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bastian Waidelich",
+            "email": "b.waidelich@wwwision.de"
+        }
+    ],
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/bwaidelich"
+        },
+        {
+            "type": "paypal",
+            "url": "https://www.paypal.me/bwaidelich"
+        }
+    ],
+    "require": {
+        "php": ">=8.4",
+        "guzzlehttp/psr7": "^2.10",
+        "neos/fusion-form": "^3",
+        "neos/neos": "^8.3",
+        "psr/clock": "^1",
+        "psr/http-message": "^1.1 || ^2.0",
+        "ramsey/uuid": "^4",
+        "wwwision/neos-modulecomponents": "^1",
+        "webmozart/assert": "^1 || ^2"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "phpstan/phpstan": "^2",
+        "friendsofphp/php-cs-fixer": "^3",
+        "phpunit/phpunit": "^12"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wwwision\\Neos\\Submissions\\": "Classes/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Wwwision\\Neos\\Submissions\\Tests\\": "Tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "neos/composer-plugin": true
+        }
+    },
+    "extra": {
+        "neos": {
+            "package-key": "Wwwision.Neos.Submissions"
+        }
+    },
+    "scripts": {
+        "test:cs": "php-cs-fixer check",
+        "test:cs:fix": "php-cs-fixer fix",
+        "test:phpstan": "phpstan",
+        "test:phpunit": "phpunit",
+        "test": [
+            "@test:cs",
+            "@test:phpstan",
+            "@test:phpunit"
+        ]
+    }
+}

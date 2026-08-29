@@ -1,0 +1,18 @@
+Wwwision.Neos.Submissions.SubmissionsModuleController.index = NeosBE:Module {
+  translateContent = true
+  content = afx`
+    <Neos.Fusion.Form:Form attributes.class="filter" form.method="GET" form.target.action="submissions">
+      <Neos.Fusion.Form:Neos.BackendModule.FieldContainer field.name="preset" attributes.class="neos-span3 neos-select">
+        <Neos.Fusion.Form:Select attributes.onchange="this.form.submit()">
+          <Neos.Fusion.Form:Select.Option option.value="" content="LLL:selectPreset" />
+          <Neos.Fusion:Loop items={presets} itemName="preset">
+            <Neos.Fusion.Form:Select.Option option.value={preset.id} content={preset.title} attributes.title={'ID: ' + preset.id} />
+          </Neos.Fusion:Loop>
+        </Neos.Fusion.Form:Select>
+      </Neos.Fusion.Form:Neos.BackendModule.FieldContainer>
+      <div class="filter-submit">
+        <NeosBE:Button isPrimary={true} content="LLL:filter.apply" />
+      </div>
+    </Neos.Fusion.Form:Form>
+  `
+}

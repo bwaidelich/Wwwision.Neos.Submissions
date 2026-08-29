@@ -1,0 +1,34 @@
+Wwwision\Neos\Submissions\Adapter\SubmissionLabelGenerator\EelSubmissionLabelGeneratorFactory:
+  arguments:
+    2:
+      setting: 'Neos.Fusion.defaultContext'
+Wwwision\Neos\Submissions\LabelGenerator\SubmissionLabelGenerator\SubmissionLabelGeneratorFactory:
+  scope: singleton
+  className: Wwwision\Neos\Submissions\Adapter\SubmissionLabelGenerator\EelSubmissionLabelGeneratorFactory
+
+Wwwision\Neos\Submissions\Adapter\FormLabelGenerator\EelFormLabelGeneratorFactory:
+  arguments:
+    3:
+      setting: 'Neos.Fusion.defaultContext'
+
+Wwwision\Neos\Submissions\LabelGenerator\FormLabelGenerator\FormLabelGeneratorFactory:
+  scope: singleton
+  className: Wwwision\Neos\Submissions\Adapter\FormLabelGenerator\EelFormLabelGeneratorFactory
+
+Wwwision\Neos\Submissions\Adapter\ForProvidingPresets\ForProvidingPresetsFromSettings:
+  arguments:
+    1:
+      setting: Wwwision.Neos.Submissions.presets
+
+Wwwision\Neos\Submissions\Ports\ForProvidingPresets:
+  scope: prototype
+  className: Wwwision\Neos\Submissions\Adapter\ForProvidingPresets\ForProvidingPresetsFromSettings
+
+Wwwision\Neos\Submissions\Factory\FormSubmissionServiceFactory:
+  arguments:
+    1:
+      object: Wwwision\Neos\Submissions\Adapter\ForProvidingPresets\ForProvidingPresetsFromSettings
+    2:
+      object: Wwwision\Neos\Submissions\Adapter\ForStoringSubmissions\ForStoringSubmissionsViaDbalFactory
+    3:
+      object: Wwwision\Neos\Submissions\Adapter\Clock\SystemClock

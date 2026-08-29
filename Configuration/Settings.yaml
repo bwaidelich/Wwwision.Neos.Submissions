@@ -1,0 +1,15 @@
+Wwwision:
+  Neos:
+    Submissions:
+      presets:
+        'test':
+          title: 'Testing'
+          submissionLabel:
+            options:
+              eelExpression: '${data.name + " (" + data.email + ")"}'
+          formLabel:
+            options:
+              eelExpression: '${q(site).find("#" + formId).get(0).label + " (" + q(site).find("#" + formId).closest("[instanceof Neos.Neos:Document]").get(0).label + ")"}'
+#        'preset2': []
+#          #options:
+##            tableName: 'wwwision_foo_bar'

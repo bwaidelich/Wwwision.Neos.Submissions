@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="" product-name="Wwwision.Neos.Submissions" source-language="en" datatype="plaintext">
+    <body>
+      <trans-unit id="filter.formId.all" xml:space="preserve">
+        <source>- All "{0}" forms -</source></trans-unit>
+      <trans-unit id="filter.searchTerm" xml:space="preserve">
+        <source>search term</source>
+      </trans-unit>
+      <trans-unit id="filter.searchTerm.placeholder" xml:space="preserve">
+        <source>search term</source>
+      </trans-unit>
+      <trans-unit id="filter.apply" xml:space="preserve">
+        <source>Apply filter</source>
+      </trans-unit>
+      <trans-unit id="submission.title" xml:space="preserve">
+        <source>Title</source>
+      </trans-unit>
+      <trans-unit id="submission.state" xml:space="preserve">
+        <source>State</source>
+      </trans-unit>
+      <trans-unit id="submission.state.active" xml:space="preserve">
+        <source>active</source>
+      </trans-unit>
+      <trans-unit id="submission.state.inactive" xml:space="preserve">
+        <source>inactive</source>
+      </trans-unit>
+      <trans-unit id="submission.creationDate" xml:space="preserve">
+        <source>Creation date</source>
+      </trans-unit>
+      <trans-unit id="details" xml:space="preserve">
+        <source>Details</source>
+      </trans-unit>
+      <trans-unit id="noSubmissionsMatchFilter" xml:space="preserve">
+        <source>No submissions match the filter criteria</source>
+      </trans-unit>
+      <group id="numberOfSubmissionsMatchFilter" restype="x-gettext-plurals">
+        <trans-unit id="numberOfSubmissionsMatchFilter[0]" xml:space="preserve">
+            <source>One submission matches the filter criteria</source>
+          </trans-unit>
+        <trans-unit id="numberOfSubmissionsMatchFilter[1]" xml:space="preserve">
+            <source>{0} submissions match the filter criteria</source>
+          </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>
