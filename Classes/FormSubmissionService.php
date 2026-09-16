@@ -28,8 +28,8 @@ final class FormSubmissionService
 
     public function handleAddSubmission(AddSubmission $command): void
     {
-        $submissionLabel = ($this->preset->submissionLabelGenerator)($command->submissionId, $command->data);
-        $formLabel = ($this->preset->formLabelGenerator)($command->formId, $this->preset);
+        $submissionLabel = $this->preset->submissionLabelGenerator->generate($command->submissionId, $command->data);
+        $formLabel = $this->preset->formLabelGenerator->generate($command->formId, $this->preset);
         $submission = Submission::create(
             id: $command->submissionId,
             presetId: $this->preset->id,

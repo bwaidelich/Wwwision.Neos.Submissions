@@ -16,12 +16,16 @@ use Generator;
 use InvalidArgumentException;
 use JsonException;
 use RuntimeException;
+use Wwwision\Neos\Submissions\Model\Form\FormId;
 use Wwwision\Neos\Submissions\Model\Form\FormIds;
+use Wwwision\Neos\Submissions\Model\Form\FormLabel;
+use Wwwision\Neos\Submissions\Model\Preset\PresetId;
 use Wwwision\Neos\Submissions\Model\Submission\Filter\Pagination;
 use Wwwision\Neos\Submissions\Model\Submission\Filter\SubmissionFilter;
 use Wwwision\Neos\Submissions\Model\Submission\Filter\SubmissionFilterResult;
 use Wwwision\Neos\Submissions\Model\Submission\Submission;
 use Wwwision\Neos\Submissions\Model\Submission\SubmissionId;
+use Wwwision\Neos\Submissions\Model\Submission\SubmissionLabel;
 use Wwwision\Neos\Submissions\Model\Submission\Submissions;
 use Wwwision\Neos\Submissions\Ports\ForStoringSubmissions;
 
@@ -58,13 +62,16 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
             $table->addColumn('id', Types::STRING, ['length' => 40]);
         }
         if (!$table->hasColumn('preset_id')) {
-            $table->addColumn('preset_id', Types::STRING, ['length' => 255]);
+            $table->addColumn('preset_id', Types::STRING, ['length' => PresetId::MAX_LENGTH]);
         }
         if (!$table->hasColumn('form_id')) {
-            $table->addColumn('form_id', Types::STRING, ['length' => 255]);
+            $table->addColumn('form_id', Types::STRING, ['length' => FormId::MAX_LENGTH]);
+        }
+        if (!$table->hasColumn('form_label')) {
+            $table->addColumn('form_label', Types::STRING, ['length' => FormLabel::MAX_LENGTH]);
         }
         if (!$table->hasColumn('label')) {
-            $table->addColumn('label', Types::STRING, ['length' => 255]);
+            $table->addColumn('label', Types::STRING, ['length' => SubmissionLabel::MAX_LENGTH]);
         }
         if (!$table->hasColumn('data')) {
             $table->addColumn('data', Types::TEXT);
@@ -81,7 +88,7 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
         if ($table->getPrimaryKey() === null) {
             $table->setPrimaryKey(['id']);
         }
-        if (!$table->hasIndex('form_id')) {
+        if (!$table->columnsAreIndexed(['form_id'])) {
             $table->addIndex(['form_id']);
         }
     }
@@ -194,6 +201,7 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
             'id' => $submission->id->value,
             'preset_id' => $submission->presetId->value,
             'form_id' => $submission->formId->value,
+            'form_label' => $submission->formLabel->value,
             'label' => $submission->label->value,
             'data' => $data,
             'protected' => $submission->protected ? 1 : 0,
@@ -216,6 +224,7 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
             id: (string)$row['id'],
             presetId: (string)$row['preset_id'],
             formId: (string)$row['form_id'],
+            formLabel: (string)$row['form_label'],
             label: (string)$row['label'],
             protected: (bool)$row['protected'],
             data: $data,
