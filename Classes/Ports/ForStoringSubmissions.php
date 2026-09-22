@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace Wwwision\Neos\Submissions\Ports;
 
-use Closure;
 use Wwwision\Neos\Submissions\Model\Form\FormIds;
 use Wwwision\Neos\Submissions\Model\Submission\Filter\Pagination;
 use Wwwision\Neos\Submissions\Model\Submission\Filter\SubmissionFilter;
 use Wwwision\Neos\Submissions\Model\Submission\Filter\SubmissionFilterResult;
 use Wwwision\Neos\Submissions\Model\Submission\Submission;
 use Wwwision\Neos\Submissions\Model\Submission\SubmissionId;
-use Wwwision\Neos\Submissions\Model\Submission\Submissions;
 
 interface ForStoringSubmissions
 {
-
     public function setup(): void;
 
     public function store(Submission $submission): void;

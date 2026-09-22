@@ -10,7 +10,6 @@ use Wwwision\Neos\Submissions\Model\Submission\SubmissionLabel;
 
 interface SubmissionLabelGenerator
 {
-
     public function generate(SubmissionId $submissionId, SubmissionData $data): SubmissionLabel;
 
 }

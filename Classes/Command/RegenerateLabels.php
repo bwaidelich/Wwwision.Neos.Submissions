@@ -10,13 +10,11 @@ final readonly class RegenerateLabels
 {
     private function __construct(
         public FormId|null $formId,
-    ) {
-    }
+    ) {}
 
     public static function create(
         FormId|string|null $formId = null,
-    ): self
-    {
+    ): self {
         if (is_string($formId)) {
             $formId = FormId::fromString($formId);
         }

@@ -14,18 +14,15 @@ use Wwwision\Neos\Submissions\Model\Submission\Submissions;
  */
 final readonly class SubmissionFilterResult implements IteratorAggregate
 {
-
     private function __construct(
         public Submissions $items,
         public int $totalCount,
-    ) {
-    }
+    ) {}
 
     public static function create(
         Submissions $submissions,
         int $totalCount,
-    ): self
-    {
+    ): self {
         return new self($submissions, $totalCount);
     }
 

@@ -9,6 +9,5 @@ final readonly class Form
     public function __construct(
         public FormId $id,
         public FormLabel $label,
-    ) {
-    }
+    ) {}
 }

@@ -6,7 +6,6 @@ namespace Wwwision\Neos\Submissions\LabelGenerator\FormLabelGenerator;
 
 interface FormLabelGeneratorFactory
 {
-
     public function create(array $options): FormLabelGenerator;
 
 }

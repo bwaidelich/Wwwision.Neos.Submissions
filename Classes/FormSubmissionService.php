@@ -21,7 +21,6 @@ use Wwwision\Neos\Submissions\Ports\ForStoringSubmissions;
 
 final class FormSubmissionService
 {
-
     public function __construct(
         private Preset $preset,
         private ForStoringSubmissions $forStoringSubmissions,
@@ -52,9 +51,11 @@ final class FormSubmissionService
     public function handleRegenerateLabels(RegenerateLabels $command, Closure|null $progressCallback = null): void
     {
         foreach ($this->forStoringSubmissions->find(SubmissionFilter::create(formId: $command->formId)) as $submission) {
-            $this->forStoringSubmissions->store($submission->with(
-                formLabel: $this->preset->formLabelGenerator->generate($submission->formId, $this->preset),
-                label: $this->preset->submissionLabelGenerator->generate($submission->id, $submission->data))
+            $this->forStoringSubmissions->store(
+                $submission->with(
+                    formLabel: $this->preset->formLabelGenerator->generate($submission->formId, $this->preset),
+                    label: $this->preset->submissionLabelGenerator->generate($submission->id, $submission->data),
+                ),
             );
             if ($progressCallback !== null) {
                 $progressCallback($submission);

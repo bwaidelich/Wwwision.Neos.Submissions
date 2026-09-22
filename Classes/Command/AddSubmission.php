@@ -14,8 +14,7 @@ final readonly class AddSubmission
         public SubmissionId $submissionId,
         public FormId $formId,
         public SubmissionData $data,
-    ) {
-    }
+    ) {}
 
     /**
      * @param SubmissionData|array<string, mixed> $data
@@ -24,8 +23,7 @@ final readonly class AddSubmission
         SubmissionId|string $submissionId,
         FormId|string $formId,
         SubmissionData|array $data,
-    ): self
-    {
+    ): self {
         if (is_string($submissionId)) {
             $submissionId = SubmissionId::fromString($submissionId);
         }

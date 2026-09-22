@@ -11,14 +11,12 @@ final readonly class SubmissionFilter
     private function __construct(
         public SearchTerm|null $searchTerm,
         public FormId|null $formId,
-    ) {
-    }
+    ) {}
 
     public static function create(
         SearchTerm|string|null $searchTerm = null,
         FormId|string|null $formId = null,
-    ): self
-    {
+    ): self {
         if (is_string($searchTerm)) {
             $searchTerm = trim($searchTerm) === '' ? null : SearchTerm::fromString($searchTerm);
         }
@@ -35,11 +33,11 @@ final readonly class SubmissionFilter
 
     public function isEmpty(): bool
     {
-        return array_all(get_object_vars($this), fn ($v) => $v === null);
+        return array_all(get_object_vars($this), fn($v) => $v === null);
     }
 
     public function getArray(): array
     {
-        return array_map(static fn ($v) => (string)$v, get_object_vars($this));
+        return array_map(static fn($v) => (string) $v, get_object_vars($this));
     }
 }

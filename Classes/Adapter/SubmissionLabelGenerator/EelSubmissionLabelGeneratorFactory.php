@@ -9,13 +9,10 @@ use Wwwision\Neos\Submissions\LabelGenerator\SubmissionLabelGenerator\Submission
 
 final readonly class EelSubmissionLabelGeneratorFactory implements SubmissionLabelGeneratorFactory
 {
-
     public function __construct(
         private EelEvaluatorInterface $eelEvaluator,
         private array $defaultContextConfiguration = [],
-    )
-    {
-    }
+    ) {}
 
     public function create(array $options): EelSubmissionLabelGenerator
     {

@@ -82,7 +82,7 @@ final class SubmissionsModuleController extends AbstractModuleController
     private function submissionFilter(): SubmissionFilter
     {
         if ($this->request->hasArgument('filter')) {
-            $filterValues = array_filter($this->request->getArgument('filter'), static fn ($value) => !empty($value));
+            $filterValues = array_filter($this->request->getArgument('filter'), static fn($value) => !empty($value));
             return SubmissionFilter::create(...$filterValues);
         }
         return SubmissionFilter::default();
@@ -90,7 +90,7 @@ final class SubmissionsModuleController extends AbstractModuleController
 
     private function pagination(): Pagination
     {
-        return Pagination::forPage((int)($this->request->getHttpRequest()->getQueryParams()['page'] ?? 1));
+        return Pagination::forPage((int) ($this->request->getHttpRequest()->getQueryParams()['page'] ?? 1));
     }
 
     protected function getErrorFlashMessage(): false

@@ -11,7 +11,6 @@ use Webmozart\Assert\Assert;
 
 final readonly class SubmissionId implements Stringable, JsonSerializable
 {
-
     private function __construct(public string $value)
     {
         Assert::uuid($value);

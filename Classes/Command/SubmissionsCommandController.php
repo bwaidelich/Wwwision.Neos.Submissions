@@ -14,7 +14,6 @@ use Wwwision\Neos\Submissions\Model\Submission\SubmissionId;
 
 final class SubmissionsCommandController extends CommandController
 {
-
     public function __construct(
         private readonly FormSubmissionServiceFactory $formSubmissionServiceFactory,
     ) {
@@ -45,7 +44,7 @@ final class SubmissionsCommandController extends CommandController
     {
         $submissionService = $this->formSubmissionServiceFactory->create(PresetId::fromString($preset));
         $this->output->progressStart();
-        $submissionService->handleRegenerateLabels(RegenerateLabels::create($form), fn () => $this->output->progressAdvance());
+        $submissionService->handleRegenerateLabels(RegenerateLabels::create($form), fn() => $this->output->progressAdvance());
         $this->output->progressFinish();
         $this->outputLine();
         $this->outputLine('<success>Success</success>');
@@ -59,7 +58,7 @@ final class SubmissionsCommandController extends CommandController
      * @param string|null $formId Only export submissions for this form
      * @param string|null $searchTerm Only export submissions matching this search term
      */
-    public function exportCommand(string $preset, string $outputFile, ?string $formId = null, ?string $searchTerm = null): void
+    public function exportCommand(string $preset, string $outputFile, string|null $formId = null, string|null $searchTerm = null): void
     {
         $service = $this->formSubmissionServiceFactory->create(PresetId::fromString($preset));
         $filter = SubmissionFilter::create(searchTerm: $searchTerm, formId: $formId);

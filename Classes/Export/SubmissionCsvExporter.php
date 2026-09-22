@@ -85,7 +85,7 @@ final class SubmissionCsvExporter
     {
         $result = [];
         foreach ($data as $key => $value) {
-            $flatKey = $prefix === '' ? (string)$key : $prefix . '.' . $key;
+            $flatKey = $prefix === '' ? (string) $key : $prefix . '.' . $key;
             if (is_array($value)) {
                 $result += self::flattenData($value, $flatKey);
             } else {
@@ -100,7 +100,7 @@ final class SubmissionCsvExporter
         return match (true) {
             $value === null => '',
             is_bool($value) => $value ? 'true' : 'false',
-            default => (string)$value,
+            default => (string) $value,
         };
     }
 

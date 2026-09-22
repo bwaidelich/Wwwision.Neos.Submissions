@@ -14,15 +14,12 @@ use Traversable;
  */
 final readonly class Submissions implements IteratorAggregate
 {
-
     /**
      * @param iterable<Submission> $items
      */
     private function __construct(
         private iterable $items,
-    )
-    {
-    }
+    ) {}
 
     /**
      * @param iterable<Submission> $items

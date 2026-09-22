@@ -8,7 +8,6 @@ use Wwwision\Neos\Submissions\Model\Preset\Presets;
 
 interface ForProvidingPresets
 {
-
     public function getPresets(): Presets;
 
 }

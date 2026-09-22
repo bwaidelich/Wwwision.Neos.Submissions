@@ -14,13 +14,11 @@ use Wwwision\Neos\Submissions\Model\Submission\SubmissionId;
 
 final class StoreSubmissionAction extends AbstractAction
 {
-
     public function __construct(
         private readonly FormSubmissionServiceFactory $submissionServiceFactory,
-    ) {
-    }
+    ) {}
 
-    public function perform(): ?ActionResponse
+    public function perform(): ActionResponse|null
     {
         Assert::keyExists($this->options, 'preset');
         Assert::string($this->options['preset']);

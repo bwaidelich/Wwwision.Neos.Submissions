@@ -10,12 +10,9 @@ use Wwwision\Neos\Submissions\Model\Preset\Preset;
 
 final readonly class ForStoringSubmissionsViaDbalFactory implements ForStoringSubmissionsFactory
 {
-
-
     public function __construct(
         private Connection $connection,
-    ) {
-    }
+    ) {}
 
     public function create(Preset $preset): ForStoringSubmissionsViaDbal
     {

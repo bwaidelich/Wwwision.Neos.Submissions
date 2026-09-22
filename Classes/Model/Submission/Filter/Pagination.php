@@ -13,8 +13,7 @@ final readonly class Pagination
     private function __construct(
         public int $offset,
         public int $resultsPerPage,
-    ) {
-    }
+    ) {}
 
     public static function firstPage(): self
     {

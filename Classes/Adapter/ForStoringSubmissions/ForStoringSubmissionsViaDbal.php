@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Wwwision\Neos\Submissions\Adapter\ForStoringSubmissions;
 
-use Closure;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
@@ -13,7 +12,6 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
 use Generator;
-use InvalidArgumentException;
 use JsonException;
 use RuntimeException;
 use Wwwision\Neos\Submissions\Model\Form\FormId;
@@ -34,8 +32,7 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
     public function __construct(
         private Connection $connection,
         private string $tableName,
-    ) {
-    }
+    ) {}
 
     /**
      * Creates the underlying database table if it doesn't exist yet, or adds any missing columns/indexes to it.
@@ -97,9 +94,9 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
     {
         $row = self::submissionToRow($submission);
         $columns = array_keys($row);
-        $updateColumns = array_filter($columns, static fn (string $column): bool => $column !== 'id');
+        $updateColumns = array_filter($columns, static fn(string $column): bool => $column !== 'id');
         $columnList = implode(', ', $columns);
-        $valuesList = implode(', ', array_map(static fn (string $column): string => ':' . $column, $columns));
+        $valuesList = implode(', ', array_map(static fn(string $column): string => ':' . $column, $columns));
 
         $platform = $this->connection->getDatabasePlatform();
         $sql = match (true) {
@@ -108,14 +105,14 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
                 $this->tableName,
                 $columnList,
                 $valuesList,
-                implode(', ', array_map(static fn (string $column): string => sprintf('%1$s = VALUES(%1$s)', $column), $updateColumns)),
+                implode(', ', array_map(static fn(string $column): string => sprintf('%1$s = VALUES(%1$s)', $column), $updateColumns)),
             ),
             $platform instanceof PostgreSQLPlatform || $platform instanceof SqlitePlatform => sprintf(
                 'INSERT INTO %s (%s) VALUES (%s) ON CONFLICT (id) DO UPDATE SET %s',
                 $this->tableName,
                 $columnList,
                 $valuesList,
-                implode(', ', array_map(static fn (string $column): string => sprintf('%1$s = EXCLUDED.%1$s', $column), $updateColumns)),
+                implode(', ', array_map(static fn(string $column): string => sprintf('%1$s = EXCLUDED.%1$s', $column), $updateColumns)),
             ),
             default => throw new RuntimeException(sprintf('Upsert is not supported for database platform "%s"', $platform::class), 1787993301),
         };
@@ -146,7 +143,7 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
             ->from($this->tableName);
         $this->applyFilter($queryBuilder, $filter);
 
-        $totalCount = (int)(clone $queryBuilder)->select('COUNT(*)')->executeQuery()->fetchOne();
+        $totalCount = (int) (clone $queryBuilder)->select('COUNT(*)')->executeQuery()->fetchOne();
 
         $queryBuilder->orderBy('created_at', 'DESC');
         if ($pagination !== null) {
@@ -216,20 +213,20 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
     private static function rowToSubmission(array $row): Submission
     {
         try {
-            $data = json_decode((string)$row['data'], true, 512, JSON_THROW_ON_ERROR);
+            $data = json_decode((string) $row['data'], true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             throw new RuntimeException(sprintf('Failed to decode JSON data for submission "%s": %s', $row['id'], $e->getMessage()), 1787993221, $e);
         }
         return Submission::create(
-            id: (string)$row['id'],
-            presetId: (string)$row['preset_id'],
-            formId: (string)$row['form_id'],
-            formLabel: (string)$row['form_label'],
-            label: (string)$row['label'],
-            protected: (bool)$row['protected'],
+            id: (string) $row['id'],
+            presetId: (string) $row['preset_id'],
+            formId: (string) $row['form_id'],
+            formLabel: (string) $row['form_label'],
+            label: (string) $row['label'],
+            protected: (bool) $row['protected'],
             data: $data,
-            createdAt: (string)$row['created_at'],
-            archivedAt: $row['archived_at'] !== null ? (string)$row['archived_at'] : null,
+            createdAt: (string) $row['created_at'],
+            archivedAt: $row['archived_at'] !== null ? (string) $row['archived_at'] : null,
         );
     }
 }

@@ -13,16 +13,14 @@ use Traversable;
  */
 final readonly class Presets implements IteratorAggregate, Countable
 {
-
     /**
      * @var list<Preset>
      */
     private array $presets;
 
     private function __construct(
-        Preset ...$presets
-    )
-    {
+        Preset ...$presets,
+    ) {
         $this->presets = array_values($presets);
     }
 

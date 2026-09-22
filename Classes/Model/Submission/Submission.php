@@ -22,8 +22,7 @@ final readonly class Submission
         public bool $protected,
         public DateTimeImmutable $createdAt,
         public DateTimeImmutable|null $archivedAt,
-    ) {
-    }
+    ) {}
 
     /**
      * @param SubmissionData|array<string, mixed> $data
@@ -38,8 +37,7 @@ final readonly class Submission
         SubmissionData|array $data,
         DateTimeImmutable|string $createdAt,
         DateTimeImmutable|string|null $archivedAt,
-    ): self
-    {
+    ): self {
         if (is_string($id)) {
             $id = SubmissionId::fromString($id);
         }
@@ -80,8 +78,7 @@ final readonly class Submission
         SubmissionData|array|null $data = null,
         bool|null $protected = null,
         DateTimeImmutable|string|false|null $archivedAt = false,
-    ): self
-    {
+    ): self {
         if (is_string($formLabel)) {
             $formLabel = FormLabel::fromString($formLabel);
         }

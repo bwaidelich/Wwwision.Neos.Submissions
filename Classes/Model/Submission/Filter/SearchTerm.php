@@ -10,7 +10,6 @@ use Webmozart\Assert\Assert;
 
 final readonly class SearchTerm implements Stringable, JsonSerializable
 {
-
     public const MAX_LENGTH = 255;
 
     private function __construct(public string $value)

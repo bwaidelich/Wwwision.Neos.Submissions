@@ -13,16 +13,14 @@ use Traversable;
  */
 final readonly class Forms implements IteratorAggregate, Countable
 {
-
     /**
      * @var list<Form>
      */
     private array $forms;
 
     private function __construct(
-        Form ...$forms
-    )
-    {
+        Form ...$forms,
+    ) {
         $this->forms = array_values($forms);
     }
 
@@ -38,7 +36,6 @@ final readonly class Forms implements IteratorAggregate, Countable
     {
         yield from $this->forms;
     }
-
 
     public function first(): Form|null
     {

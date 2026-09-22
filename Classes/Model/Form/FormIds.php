@@ -13,16 +13,14 @@ use Webmozart\Assert\Assert;
  */
 final readonly class FormIds implements IteratorAggregate
 {
-
     /**
      * @var list<FormId>
      */
     private array $items;
 
     private function __construct(
-        FormId ...$items
-    )
-    {
+        FormId ...$items,
+    ) {
         $this->items = array_values($items);
     }
 

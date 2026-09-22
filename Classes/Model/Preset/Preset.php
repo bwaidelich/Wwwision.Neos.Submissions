@@ -9,7 +9,6 @@ use Wwwision\Neos\Submissions\LabelGenerator\SubmissionLabelGenerator\Submission
 
 final readonly class Preset
 {
-
     /**
      * @param array<string, mixed> $options
      */
@@ -19,6 +18,5 @@ final readonly class Preset
         public SubmissionLabelGenerator $submissionLabelGenerator,
         public FormLabelGenerator $formLabelGenerator,
         public array $options,
-    ) {
-    }
+    ) {}
 }

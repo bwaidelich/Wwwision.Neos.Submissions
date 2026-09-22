@@ -10,7 +10,6 @@ use Wwwision\Neos\Submissions\Model\Preset\Preset;
 
 interface FormLabelGenerator
 {
-
     public function generate(FormId $formId, Preset $preset): FormLabel;
 
 }

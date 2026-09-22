@@ -6,14 +6,12 @@ namespace Wwwision\Neos\Submissions\Model\Submission;
 
 final readonly class SubmissionData
 {
-
     /**
      * @param array<string, mixed> $value
      */
     private function __construct(
-        private array $value
-    ) {
-    }
+        private array $value,
+    ) {}
 
     /**
      * @param array<string, mixed> $value
