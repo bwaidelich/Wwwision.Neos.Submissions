@@ -64,7 +64,7 @@ final class SubmissionsCommandController extends CommandController
         $service = $this->formSubmissionServiceFactory->create(PresetId::fromString($preset));
         $filter = SubmissionFilter::create(searchTerm: $searchTerm, formId: $formId);
         $submissions = $service->findSubmissions($filter);
-        $csv = (new SubmissionCsvExporter())->export($submissions);
+        $csv = (new SubmissionCsvExporter())->export($submissions->items);
 
         $target = fopen($outputFile, 'wb');
         if ($target === false) {

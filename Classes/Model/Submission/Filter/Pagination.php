@@ -8,7 +8,7 @@ use Webmozart\Assert\Assert;
 
 final readonly class Pagination
 {
-    private const int RESULTS_PER_PAGE = 5;
+    private const int RESULTS_PER_PAGE = 30;
 
     private function __construct(
         public int $offset,

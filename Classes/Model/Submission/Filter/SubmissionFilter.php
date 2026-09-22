@@ -32,4 +32,14 @@ final readonly class SubmissionFilter
     {
         return new self(null, null);
     }
+
+    public function isEmpty(): bool
+    {
+        return array_all(get_object_vars($this), fn ($v) => $v === null);
+    }
+
+    public function getArray(): array
+    {
+        return array_map(static fn ($v) => (string)$v, get_object_vars($this));
+    }
 }

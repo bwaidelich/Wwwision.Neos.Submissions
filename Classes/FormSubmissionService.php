@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Wwwision\Neos\Submissions;
 
 use Closure;
+use InvalidArgumentException;
 use Psr\Clock\ClockInterface;
 use Wwwision\Neos\Submissions\Command\AddSubmission;
 use Wwwision\Neos\Submissions\Command\RegenerateLabels;
@@ -15,6 +16,7 @@ use Wwwision\Neos\Submissions\Model\Submission\Filter\Pagination;
 use Wwwision\Neos\Submissions\Model\Submission\Filter\SubmissionFilter;
 use Wwwision\Neos\Submissions\Model\Submission\Filter\SubmissionFilterResult;
 use Wwwision\Neos\Submissions\Model\Submission\Submission;
+use Wwwision\Neos\Submissions\Model\Submission\SubmissionId;
 use Wwwision\Neos\Submissions\Ports\ForStoringSubmissions;
 
 final class FormSubmissionService
@@ -63,6 +65,15 @@ final class FormSubmissionService
     public function findSubmissions(SubmissionFilter $filter, Pagination|null $pagination = null): SubmissionFilterResult
     {
         return $this->forStoringSubmissions->find($filter, $pagination);
+    }
+
+    public function getSubmission(SubmissionId $id): Submission
+    {
+        $submission = $this->forStoringSubmissions->findOne($id);
+        if ($submission === null) {
+            throw new InvalidArgumentException(sprintf('Submission "%s" not found for preset "%s"', $id->value, $this->preset->id->value), 1789994644);
+        }
+        return $submission;
     }
 
     public function findForms(): Forms

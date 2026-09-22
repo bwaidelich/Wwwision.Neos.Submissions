@@ -1,0 +1,17 @@
+Wwwision.Neos.Submissions.SubmissionsModuleController.show = NeosBE:Module {
+  translateContent = true
+  content = afx`
+    <h1>{submission.label}</h1>
+    <p>&nbsp;</p>
+    <p><b>ID:</b> {submission.id}</p>
+    <p><b>LLL:submission.form:</b> <span title={'ID: ' + submission.formId}>{submission.formLabel}</span> <small>(LLL:submission.preset: <span title={'ID: ' + submission.presetId}>{preset.title}</span>)</small></p>
+    <p><b>LLL:submission.creationDate:</b> <Wwwision.Neos.Submissions:Timestamp dateTime={submission.createdAt} /></p>
+    <p>&nbsp;</p>
+    <h2>Daten:</h2>
+    <Wwwision.Neos.Submissions:SubmissionData values={submissionData} />
+  `
+
+  footer = afx`
+    <NeosBE:Button action="submissions" arguments={{preset: preset.id.value, filter: filter.array}} content="LLL:back" icon="arrow-left" />
+  `
+}

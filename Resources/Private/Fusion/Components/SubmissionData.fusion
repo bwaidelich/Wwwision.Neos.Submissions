@@ -1,0 +1,51 @@
+prototype(Wwwision.Neos.Submissions:SubmissionData) < prototype(Neos.Fusion:Component) {
+  values = ${[]}
+
+  renderer = Neos.Fusion:Loop {
+    items = ${props.values}
+    itemName = 'fieldValue'
+    itemKey = 'fieldName'
+
+    itemRenderer = Wwwision.Neos.Submissions:SubmissionData.value {
+      fieldName = ${fieldName}
+      fieldValue = ${fieldValue}
+    }
+    @process.wrap = ${'<ul>' + value + '</ul>'}
+  }
+}
+
+prototype(Wwwision.Neos.Submissions:SubmissionData.value) < prototype(Neos.Fusion:Component) {
+  fieldName = ''
+  fieldValue = ${[]}
+
+  @private {
+    i18n = ${I18n.id('').source('Modules').package('Wwwision.Neos.Submissions')}
+  }
+  renderer = Neos.Fusion:Case {
+    jsonDate {
+      condition = ${Type.isArray(props.fieldValue) && props.fieldValue['date'] && props.fieldValue['timezone_type'] && props.fieldValue['timezone']}
+      renderer = Wwwision.Neos.Submissions:Timestamp {
+        dateTime = ${Date.create(props.fieldValue['date'])}
+      }
+    }
+    array {
+      condition = ${Type.isArray(props.fieldValue)}
+      renderer = Wwwision.Neos.Submissions:SubmissionData {
+        values = ${props.fieldValue}
+      }
+    }
+    date {
+      condition = ${Type.instance(props.fieldValue, '\DateTimeInterface')}
+      renderer = ${Date.format(props.fieldValue, 'd.m.Y')}
+    }
+    boolean {
+      condition = ${Type.isBoolean(props.fieldValue)}
+      renderer = ${props.fieldValue ? private.i18n.id('yes').translate() : private.i18n.id('no').translate()}
+    }
+    default {
+      condition = ${true}
+      renderer = ${props.fieldValue}
+    }
+    @process.wrap = ${'<li><b>' + props.fieldName + '</b>: ' + value + '</li>'}
+  }
+}

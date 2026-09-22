@@ -14,6 +14,7 @@ use Wwwision\Neos\Submissions\Factory\FormSubmissionServiceFactory;
 use Wwwision\Neos\Submissions\Model\Preset\PresetId;
 use Wwwision\Neos\Submissions\Model\Submission\Filter\Pagination;
 use Wwwision\Neos\Submissions\Model\Submission\Filter\SubmissionFilter;
+use Wwwision\Neos\Submissions\Model\Submission\SubmissionId;
 
 final class SubmissionsModuleController extends AbstractModuleController
 {
@@ -32,23 +33,27 @@ final class SubmissionsModuleController extends AbstractModuleController
         $this->view->assign('presets', $presets);
     }
 
-    public function submissionsAction(string $preset): void
+    public function submissionsAction(string $preset = ''): void
     {
+        if ($preset === '') {
+            $this->redirect('index');
+        }
         $presetId = PresetId::fromString($preset);
         $presetVo = $this->formSubmissionServiceFactory->presets()->get($presetId);
-        $submissionService = $this->formSubmissionServiceFactory->create($presetId);
+        $service = $this->formSubmissionServiceFactory->create($presetId);
         $filter = $this->submissionFilter();
         $pagination = $this->pagination();
         $this->view->assignMultiple([
+            'presets' => $this->formSubmissionServiceFactory->presets(),
             'preset' => $presetVo,
-            'forms' => $submissionService->findForms(),
+            'forms' => $service->findForms(),
             'filter' => $filter,
             'pagination' => $pagination,
-            'submissions' => $submissionService->findSubmissions($filter, $pagination),
+            'submissions' => $service->findSubmissions($filter, $pagination),
         ]);
     }
 
-    public function exportAction(string $preset): StreamInterface
+    public function downloadAction(string $preset): StreamInterface
     {
         $service = $this->formSubmissionServiceFactory->create(PresetId::fromString($preset));
         $filterResult = $service->findSubmissions($this->submissionFilter());
@@ -56,8 +61,22 @@ final class SubmissionsModuleController extends AbstractModuleController
 
         $filename = sprintf('submissions-%s-%s.csv', $preset, (new DateTimeImmutable())->format('Ymd-His'));
         $this->response->setContentType('text/csv');
-        //$this->response->setHttpHeader('Content-Disposition', sprintf('attachment; filename="%s"', $filename));
+        $this->response->setHttpHeader('Content-Disposition', sprintf('attachment; filename="%s"', $filename));
         return Utils::streamFor($csv);
+    }
+
+    public function showAction(string $preset, string $id): void
+    {
+        $presetId = PresetId::fromString($preset);
+        $presetVo = $this->formSubmissionServiceFactory->presets()->get($presetId);
+        $service = $this->formSubmissionServiceFactory->create(PresetId::fromString($preset));
+        $submission = $service->getSubmission(SubmissionId::fromString($id));
+        $this->view->assignMultiple([
+            'preset' => $presetVo,
+            'submission' => $submission,
+            'submissionData' => $submission->data->toArray(),
+            'filter' => $this->submissionFilter(),
+        ]);
     }
 
     private function submissionFilter(): SubmissionFilter

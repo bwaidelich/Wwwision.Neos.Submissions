@@ -1,65 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file original="" product-name="Wwwision.Neos.Submissions" source-language="en" datatype="plaintext">
+  <file original="" product-name="Wwwision.Neos.Submissions" source-language="en" target-language="de" datatype="plaintext">
     <body>
       <trans-unit id="yes" xml:space="preserve">
         <source>yes</source>
+        <target>ja</target>
       </trans-unit>
       <trans-unit id="no" xml:space="preserve">
         <source>no</source>
+        <target>nein</target>
       </trans-unit>
       <trans-unit id="back" xml:space="preserve">
         <source>back</source>
+        <target>zurück</target>
       </trans-unit>
       <trans-unit id="filter.formId.all" xml:space="preserve">
         <source>- All "{0}" forms -</source>
+        <target>- Alle "{0}" Formulare -</target>
       </trans-unit>
       <trans-unit id="filter.searchTerm" xml:space="preserve">
         <source>search term</source>
+        <target>Suchbegriff</target>
       </trans-unit>
       <trans-unit id="filter.searchTerm.placeholder" xml:space="preserve">
         <source>search term</source>
+        <target>Suchbegriff</target>
       </trans-unit>
       <trans-unit id="filter.apply" xml:space="preserve">
         <source>Apply filter</source>
+        <target>Filtern</target>
       </trans-unit>
       <trans-unit id="selectPreset" xml:space="preserve">
         <source>select form type</source>
+        <target>Formulartyp wählen</target>
       </trans-unit>
       <trans-unit id="submission" xml:space="preserve">
         <source>Submission</source>
+        <target>Eintrag</target>
       </trans-unit>
       <trans-unit id="submission.label" xml:space="preserve">
         <source>Title</source>
+        <target>Bezeichnung</target>
       </trans-unit>
       <trans-unit id="submission.form" xml:space="preserve">
         <source>Form</source>
+        <target>Formular</target>
       </trans-unit>
       <trans-unit id="submission.preset" xml:space="preserve">
         <source>Preset</source>
+        <target>Formulartyp</target>
       </trans-unit>
       <trans-unit id="submission.protected" xml:space="preserve">
         <source>Protected</source>
+        <target>Geschützt</target>
       </trans-unit>
       <trans-unit id="submission.creationDate" xml:space="preserve">
         <source>Creation date</source>
+        <target>Datum</target>
       </trans-unit>
       <trans-unit id="details" xml:space="preserve">
         <source>Details</source>
+        <target>Details</target>
       </trans-unit>
       <trans-unit id="noSubmissionsMatchFilter" xml:space="preserve">
         <source>No submissions match the filter criteria</source>
+        <target>Es existieren keine Einträge die den Filterkriterien entsprechen</target>
       </trans-unit>
       <group id="numberOfSubmissionsMatchFilter" restype="x-gettext-plurals">
         <trans-unit id="numberOfSubmissionsMatchFilter[0]" xml:space="preserve">
-            <source>One submission matches the filter criteria</source>
-          </trans-unit>
+          <source>One submission matches the filter criteria</source>
+          <target>Ein Eintrag entspricht den Filterkriterien</target>
+        </trans-unit>
         <trans-unit id="numberOfSubmissionsMatchFilter[1]" xml:space="preserve">
-            <source>{0} submissions match the filter criteria</source>
-          </trans-unit>
+          <source>{0} submissions match the filter criteria</source>
+          <target>{0} Einträge entsprechen den Filterkriterien</target>
+        </trans-unit>
       </group>
       <trans-unit id="csvDownload" xml:space="preserve">
         <source>Download selected</source>
+        <target>Ausgewählte herunterladen</target>
       </trans-unit>
     </body>
   </file>
