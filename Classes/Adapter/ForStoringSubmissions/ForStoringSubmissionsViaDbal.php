@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Wwwision\Neos\Submissions\Adapter\ForStoringSubmissions;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
@@ -143,9 +145,11 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
             ->from($this->tableName);
         $this->applyFilter($queryBuilder, $filter);
 
-        $totalCount = (int) (clone $queryBuilder)->select('COUNT(*)')->executeQuery()->fetchOne();
+        $totalCountResult = (clone $queryBuilder)->select('COUNT(*)')->executeQuery()->fetchOne();
+        $totalCount = is_numeric($totalCountResult) ? (int) $totalCountResult : 0;
 
-        $queryBuilder->orderBy('created_at', 'DESC');
+        // created_at is stored as a second-precision UTC string, so the id acts as a tiebreaker to keep pagination stable
+        $queryBuilder->orderBy('created_at', 'DESC')->addOrderBy('id', 'DESC');
         if ($pagination !== null) {
             $queryBuilder->setMaxResults($pagination->resultsPerPage)->setFirstResult($pagination->offset);
         }
@@ -179,9 +183,17 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
         }
         if ($filter->searchTerm !== null) {
             $queryBuilder
-                ->andWhere('(label LIKE :searchTerm OR data LIKE :searchTerm)')
-                ->setParameter('searchTerm', '%' . $filter->searchTerm->value . '%');
+                ->andWhere("(label LIKE :searchTerm ESCAPE '!' OR data LIKE :searchTerm ESCAPE '!')")
+                ->setParameter('searchTerm', '%' . self::escapeLikeValue($filter->searchTerm->value) . '%');
         }
+    }
+
+    /**
+     * Escapes LIKE wildcards in a user-supplied search term so that "%" and "_" are matched literally
+     */
+    private static function escapeLikeValue(string $value): string
+    {
+        return addcslashes($value, '!%_');
     }
 
     /**
@@ -190,7 +202,8 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
     private static function submissionToRow(Submission $submission): array
     {
         try {
-            $data = json_encode($submission->data->toArray(), JSON_THROW_ON_ERROR);
+            // keep unicode characters and slashes as-is so that the stored JSON can be searched via LIKE
+            $data = json_encode($submission->data->toArray(), JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         } catch (JsonException $e) {
             throw new RuntimeException(sprintf('Failed to encode JSON data for submission "%s": %s', $submission->id->value, $e->getMessage()), 1787993243, $e);
         }
@@ -202,9 +215,26 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
             'label' => $submission->label->value,
             'data' => $data,
             'protected' => $submission->protected ? 1 : 0,
-            'created_at' => $submission->createdAt->format(DATE_ATOM),
-            'archived_at' => $submission->archivedAt?->format(DATE_ATOM),
+            'created_at' => self::formatDateTime($submission->createdAt),
+            'archived_at' => $submission->archivedAt !== null ? self::formatDateTime($submission->archivedAt) : null,
         ];
+    }
+
+    /**
+     * Timestamps are stored as UTC strings so that their lexicographic order matches the chronological order
+     */
+    private static function formatDateTime(DateTimeImmutable $dateTime): string
+    {
+        return $dateTime->setTimezone(new DateTimeZone('UTC'))->format(DATE_ATOM);
+    }
+
+    private static function parseDateTime(string $value): DateTimeImmutable
+    {
+        $dateTime = DateTimeImmutable::createFromFormat(DATE_ATOM, $value);
+        if ($dateTime === false) {
+            throw new RuntimeException(sprintf('Failed to parse date time string "%s"', $value), 1789995001);
+        }
+        return $dateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
     }
 
     /**
@@ -212,21 +242,42 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
      */
     private static function rowToSubmission(array $row): Submission
     {
+        $id = self::stringColumn($row, 'id');
         try {
-            $data = json_decode((string) $row['data'], true, 512, JSON_THROW_ON_ERROR);
+            $data = json_decode(self::stringColumn($row, 'data'), true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
-            throw new RuntimeException(sprintf('Failed to decode JSON data for submission "%s": %s', $row['id'], $e->getMessage()), 1787993221, $e);
+            throw new RuntimeException(sprintf('Failed to decode JSON data for submission "%s": %s', $id, $e->getMessage()), 1787993221, $e);
         }
+        if (!is_array($data)) {
+            throw new RuntimeException(sprintf('Expected JSON data of submission "%s" to be an object, got %s', $id, get_debug_type($data)), 1789995007);
+        }
+        /** @var array<string, mixed> $data */
+        $archivedAt = $row['archived_at'] ?? null;
         return Submission::create(
-            id: (string) $row['id'],
-            presetId: (string) $row['preset_id'],
-            formId: (string) $row['form_id'],
-            formLabel: (string) $row['form_label'],
-            label: (string) $row['label'],
-            protected: (bool) $row['protected'],
+            id: $id,
+            presetId: self::stringColumn($row, 'preset_id'),
+            formId: self::stringColumn($row, 'form_id'),
+            formLabel: self::stringColumn($row, 'form_label'),
+            label: self::stringColumn($row, 'label'),
+            protected: (bool) ($row['protected'] ?? false),
             data: $data,
-            createdAt: (string) $row['created_at'],
-            archivedAt: $row['archived_at'] !== null ? (string) $row['archived_at'] : null,
+            createdAt: self::parseDateTime(self::stringColumn($row, 'created_at')),
+            archivedAt: $archivedAt !== null ? self::parseDateTime(self::stringColumn($row, 'archived_at')) : null,
         );
+    }
+
+    /**
+     * @param array<string, mixed> $row
+     */
+    private static function stringColumn(array $row, string $column): string
+    {
+        $value = $row[$column] ?? null;
+        if (is_int($value) || is_float($value)) {
+            return (string) $value;
+        }
+        if (!is_string($value)) {
+            throw new RuntimeException(sprintf('Expected column "%s" to be a string, got %s', $column, get_debug_type($value)), 1789995008);
+        }
+        return $value;
     }
 }

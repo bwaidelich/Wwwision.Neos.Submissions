@@ -6,7 +6,7 @@ Wwwision.Neos.Submissions.SubmissionsModuleController.index = NeosBE:Module {
         <Neos.Fusion.Form:Select attributes.onchange="this.form.submit()">
           <Neos.Fusion.Form:Select.Option option.value="" content="- LLL:selectPreset -" />
           <Neos.Fusion:Loop items={presets} itemName="preset">
-            <Neos.Fusion.Form:Select.Option option.value={preset.id} content={preset.title.value} attributes.title={'ID: ' + preset.id} />
+            <Neos.Fusion.Form:Select.Option option.value={preset.id} content={String.htmlSpecialChars(preset.title.value)} attributes.title={'ID: ' + preset.id} />
           </Neos.Fusion:Loop>
         </Neos.Fusion.Form:Select>
       </Neos.Fusion.Form:Neos.BackendModule.FieldContainer>

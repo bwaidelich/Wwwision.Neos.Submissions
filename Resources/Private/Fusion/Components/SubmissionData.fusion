@@ -14,6 +14,8 @@ prototype(Wwwision.Neos.Submissions:SubmissionData) < prototype(Neos.Fusion:Comp
   }
 }
 
+# Renders a single (potentially nested) submission field.
+# NOTE: submission data is user-supplied and must never reach the HTML unescaped (Fusion does not auto-escape)
 prototype(Wwwision.Neos.Submissions:SubmissionData.value) < prototype(Neos.Fusion:Component) {
   fieldName = ''
   fieldValue = ${[]}
@@ -44,8 +46,8 @@ prototype(Wwwision.Neos.Submissions:SubmissionData.value) < prototype(Neos.Fusio
     }
     default {
       condition = ${true}
-      renderer = ${props.fieldValue}
+      renderer = ${String.htmlSpecialChars(String.toString(props.fieldValue))}
     }
-    @process.wrap = ${'<li><b>' + props.fieldName + '</b>: ' + value + '</li>'}
+    @process.wrap = ${'<li><b>' + String.htmlSpecialChars(String.toString(props.fieldName)) + '</b>: ' + value + '</li>'}
   }
 }

@@ -28,10 +28,13 @@ final class StoreSubmissionAction extends AbstractAction
 
         Assert::keyExists($this->options, 'formId');
         Assert::string($this->options['formId']);
+        $data = $this->options['data'] ?? [];
+        Assert::isArray($data);
+        /** @var array<string, mixed> $data */
         $command = AddSubmission::create(
             submissionId: SubmissionId::generate(),
             formId: $this->options['formId'],
-            data: $this->options['data'],
+            data: $data,
         );
         $submissionService->handleAddSubmission($command);
         return null;

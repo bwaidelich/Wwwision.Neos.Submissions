@@ -33,11 +33,17 @@ final readonly class SubmissionFilter
 
     public function isEmpty(): bool
     {
-        return array_all(get_object_vars($this), fn($v) => $v === null);
+        return $this->searchTerm === null && $this->formId === null;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getArray(): array
     {
-        return array_map(static fn($v) => (string) $v, get_object_vars($this));
+        return [
+            'searchTerm' => $this->searchTerm !== null ? $this->searchTerm->value : '',
+            'formId' => $this->formId !== null ? $this->formId->value : '',
+        ];
     }
 }

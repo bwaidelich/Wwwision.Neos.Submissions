@@ -6,7 +6,7 @@ Wwwision.Neos.Submissions.SubmissionsModuleController.submissions = NeosBE:Modul
         <Neos.Fusion.Form:Select attributes.onchange="this.form.submit()">
           <Neos.Fusion.Form:Select.Option option.value="" content="- LLL:selectPreset -" />
           <Neos.Fusion:Loop items={presets} itemName="preset">
-            <Neos.Fusion.Form:Select.Option option.value={preset.id} content={preset.title.value} attributes.title={'ID: ' + preset.id} />
+            <Neos.Fusion.Form:Select.Option option.value={preset.id} content={String.htmlSpecialChars(preset.title.value)} attributes.title={'ID: ' + preset.id} />
           </Neos.Fusion:Loop>
         </Neos.Fusion.Form:Select>
       </Neos.Fusion.Form:Neos.BackendModule.FieldContainer>
@@ -16,12 +16,12 @@ Wwwision.Neos.Submissions.SubmissionsModuleController.submissions = NeosBE:Modul
             <NeosBE:Translate id="filter.formId.all" arguments={[preset.title.value]} />
           </Neos.Fusion.Form:Select.Option>
           <Neos.Fusion:Loop items={forms} itemName="form">
-            <Neos.Fusion.Form:Select.Option option.value={form.id} content={form.label.value} attributes.title={'ID: ' + form.id} />
+            <Neos.Fusion.Form:Select.Option option.value={form.id} content={String.htmlSpecialChars(form.label.value)} attributes.title={'ID: ' + form.id} />
           </Neos.Fusion:Loop>
         </Neos.Fusion.Form:Select>
         <Neos.Fusion.Form:Select attributes.disabled={true} @if.hasMultipleForms={Array.length(forms) <= 1}>
           <Neos.Fusion:Loop items={forms} itemName="form">
-            <Neos.Fusion.Form:Select.Option option.value={form.id} content={form.label.value} attributes.title={'ID: ' + form.id} />
+            <Neos.Fusion.Form:Select.Option option.value={form.id} content={String.htmlSpecialChars(form.label.value)} attributes.title={'ID: ' + form.id} />
           </Neos.Fusion:Loop>
         </Neos.Fusion.Form:Select>
       </Neos.Fusion.Form:Neos.BackendModule.FieldContainer>
@@ -51,7 +51,7 @@ Wwwision.Neos.Submissions.SubmissionsModuleController.submissions = NeosBE:Modul
                 <NeosBE:Icon icon="envelope-circle-check"/>
               </NeosBE:Table.Cell>
               <NeosBE:Table.Cell>
-                {submission.label}
+                {String.htmlSpecialChars(submission.label.value)}
               </NeosBE:Table.Cell>
               <NeosBE:Table.Cell>
                 <Wwwision.Neos.Submissions:Timestamp dateTime={submission.createdAt} />

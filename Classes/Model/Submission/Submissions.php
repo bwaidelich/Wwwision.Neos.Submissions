@@ -15,7 +15,7 @@ use Traversable;
 final readonly class Submissions implements IteratorAggregate
 {
     /**
-     * @param iterable<Submission> $items
+     * @param iterable<mixed> $items
      */
     private function __construct(
         private iterable $items,

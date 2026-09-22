@@ -7,10 +7,8 @@ namespace Wwwision\Neos\Submissions\Command;
 use Neos\Flow\Cli\CommandController;
 use Wwwision\Neos\Submissions\Export\SubmissionCsvExporter;
 use Wwwision\Neos\Submissions\Factory\FormSubmissionServiceFactory;
-use Wwwision\Neos\Submissions\Model\Form\FormId;
 use Wwwision\Neos\Submissions\Model\Preset\PresetId;
 use Wwwision\Neos\Submissions\Model\Submission\Filter\SubmissionFilter;
-use Wwwision\Neos\Submissions\Model\Submission\SubmissionId;
 
 final class SubmissionsCommandController extends CommandController
 {
@@ -29,17 +27,12 @@ final class SubmissionsCommandController extends CommandController
         $this->outputLine('<success>Success</success>');
     }
 
-    public function testCommand(string $preset): void
-    {
-        $service = $this->formSubmissionServiceFactory->create(PresetId::fromString($preset));
-        $service->handleAddSubmission(AddSubmission::create(
-            SubmissionId::generate(),
-            FormId::fromString('test'),
-            ['title' => 'Some Title', 'foo' => ['bar' => 'baz']],
-        ));
-        $this->outputLine('<success>Success</success>');
-    }
-
+    /**
+     * Re-generate the form and submission labels of all stored submissions of the given preset
+     *
+     * @param string $preset The preset to regenerate labels for
+     * @param string|null $form Only regenerate labels of submissions for this form
+     */
     public function regenerateLabelsCommand(string $preset, string|null $form = null): void
     {
         $submissionService = $this->formSubmissionServiceFactory->create(PresetId::fromString($preset));

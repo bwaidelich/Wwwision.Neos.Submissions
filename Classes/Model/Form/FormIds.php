@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Wwwision\Neos\Submissions\Model\Form;
 
+use InvalidArgumentException;
 use IteratorAggregate;
 use Traversable;
-use Webmozart\Assert\Assert;
 
 /**
  * @implements IteratorAggregate<FormId>
@@ -25,7 +25,7 @@ final readonly class FormIds implements IteratorAggregate
     }
 
     /**
-     * @param array<FormId|string> $items
+     * @param array<mixed> $items
      */
     public static function fromArray(array $items): self
     {
@@ -33,9 +33,10 @@ final readonly class FormIds implements IteratorAggregate
         foreach ($items as $item) {
             if (is_string($item)) {
                 $processedItems[] = FormId::fromString($item);
-            } else {
-                Assert::isInstanceOf($item, FormId::class);
+            } elseif ($item instanceof FormId) {
                 $processedItems[] = $item;
+            } else {
+                throw new InvalidArgumentException(sprintf('Expected string or instance of %s, got %s', FormId::class, get_debug_type($item)), 1789995006);
             }
         }
         return new self(...$processedItems);

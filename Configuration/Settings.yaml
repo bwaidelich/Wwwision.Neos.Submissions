@@ -1,15 +1,21 @@
-#Wwwision:
-#  Neos:
-#    Submissions:
-#      presets:
-#        'test':
-#          title: 'Testing'
-#          submissionLabel:
-#            options:
-#              eelExpression: '${data.name + " (" + data.email + ")"}'
-#          formLabel:
-#            options:
-#              eelExpression: '${q(site).find("#" + formId).get(0).label + " (" + q(site).find("#" + formId).closest("[instanceof Neos.Neos:Document]").get(0).label + ")"}'
-#        'preset2': []
-#          #options:
-##            tableName: 'wwwision_foo_bar'
+Wwwision:
+  Neos:
+    Submissions:
+      # Submission presets, keyed by preset id. Each preset gets its own storage (database table) and label generators.
+      #
+      # Example:
+      #
+      # presets:
+      #   'contact':
+      #     title: 'Contact forms'
+      #     submissionLabel:
+      #       # factory: Wwwision\Neos\Submissions\LabelGenerator\SubmissionLabelGenerator\SubmissionLabelGeneratorFactory
+      #       options:
+      #         eelExpression: '${data.name + " (" + data.email + ")"}'
+      #     formLabel:
+      #       # factory: Wwwision\Neos\Submissions\LabelGenerator\FormLabelGenerator\FormLabelGeneratorFactory
+      #       options:
+      #         eelExpression: '${q(site).find("#" + formId).get(0).label}'
+      #     options:
+      #       tableName: 'wwwision_neos_submissions_contact'
+      presets: []

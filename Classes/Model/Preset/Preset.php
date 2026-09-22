@@ -10,7 +10,7 @@ use Wwwision\Neos\Submissions\LabelGenerator\SubmissionLabelGenerator\Submission
 final readonly class Preset
 {
     /**
-     * @param array<string, mixed> $options
+     * @param array<mixed> $options
      */
     public function __construct(
         public PresetId $id,

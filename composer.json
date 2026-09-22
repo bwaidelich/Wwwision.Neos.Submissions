@@ -21,6 +21,7 @@
     ],
     "require": {
         "php": ">=8.4",
+        "doctrine/dbal": "^3.6",
         "guzzlehttp/psr7": "^2.10",
         "neos/fusion-form": "^3",
         "neos/neos": "^8.3",

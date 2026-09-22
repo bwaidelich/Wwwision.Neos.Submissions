@@ -19,6 +19,7 @@ use Wwwision\Neos\Submissions\Model\Submission\Submissions;
 final class SubmissionCsvExporter
 {
     private const DELIMITER = ',';
+    private const ENCLOSURE = '"';
 
     /**
      * @var list<string>
@@ -26,11 +27,16 @@ final class SubmissionCsvExporter
     private const FIXED_COLUMNS = ['id', 'formId', 'presetId', 'label', 'createdAt', 'archivedAt', 'protected'];
 
     /**
+     * Prefix for form field columns whose name collides with one of the {@see self::FIXED_COLUMNS}
+     */
+    private const DATA_COLUMN_PREFIX = 'data.';
+
+    /**
      * @return resource A read-only, rewound stream containing the rendered CSV file.
      */
     public function export(Submissions $submissions)
     {
-        $spool = fopen('php://temp', 'r+');
+        $spool = self::openTemporaryStream();
         $columns = array_fill_keys(self::FIXED_COLUMNS, true);
         foreach ($submissions as $submission) {
             $row = self::flattenSubmission($submission);
@@ -41,20 +47,59 @@ final class SubmissionCsvExporter
         }
         $header = array_keys($columns);
 
-        $output = fopen('php://temp', 'r+');
-        fputcsv($output, $header, self::DELIMITER);
+        $output = self::openTemporaryStream();
+        self::writeCsvLine($output, $header);
         rewind($spool);
         while (($line = fgets($spool)) !== false) {
             $row = self::readSpoolLine($line);
             $cells = [];
             foreach ($header as $column) {
-                $cells[] = $row[$column] ?? '';
+                $cells[] = self::neutralizeFormula($row[$column] ?? '');
             }
-            fputcsv($output, $cells, self::DELIMITER);
+            self::writeCsvLine($output, $cells);
         }
         fclose($spool);
         rewind($output);
         return $output;
+    }
+
+    /**
+     * @return resource
+     */
+    private static function openTemporaryStream()
+    {
+        $stream = fopen('php://temp', 'r+');
+        if ($stream === false) {
+            throw new RuntimeException('Failed to open temporary stream for CSV export', 1798000003);
+        }
+        return $stream;
+    }
+
+    /**
+     * @param resource $stream
+     * @param list<string> $cells
+     */
+    private static function writeCsvLine($stream, array $cells): void
+    {
+        // an empty escape character disables PHP's proprietary backslash handling (RFC 4180 compliant output,
+        // and the only non-deprecated option as of PHP 8.4)
+        fputcsv($stream, $cells, self::DELIMITER, self::ENCLOSURE, '');
+    }
+
+    /**
+     * Cells that spreadsheet applications would interpret as formulas (e.g. "=HYPERLINK(...)" or "=cmd|...")
+     * are prefixed with a single quote so that they are treated as plain text (CSV injection mitigation).
+     * Plain numbers (including negative ones) are left untouched.
+     */
+    private static function neutralizeFormula(string $cell): string
+    {
+        if ($cell === '' || is_numeric($cell)) {
+            return $cell;
+        }
+        if (in_array($cell[0], ['=', '+', '-', '@', "\t", "\r"], true)) {
+            return "'" . $cell;
+        }
+        return $cell;
     }
 
     /**
@@ -72,6 +117,10 @@ final class SubmissionCsvExporter
             'protected' => self::stringifyScalar($submission->protected),
         ];
         foreach (self::flattenData($submission->data->toArray()) as $key => $value) {
+            // form fields must never overwrite the fixed submission columns
+            if (in_array($key, self::FIXED_COLUMNS, true)) {
+                $key = self::DATA_COLUMN_PREFIX . $key;
+            }
             $row[$key] = $value;
         }
         return $row;
@@ -100,7 +149,8 @@ final class SubmissionCsvExporter
         return match (true) {
             $value === null => '',
             is_bool($value) => $value ? 'true' : 'false',
-            default => (string) $value,
+            is_scalar($value), $value instanceof \Stringable => (string) $value,
+            default => get_debug_type($value),
         };
     }
 

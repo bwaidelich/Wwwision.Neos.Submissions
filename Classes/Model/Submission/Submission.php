@@ -70,6 +70,9 @@ final readonly class Submission
     }
 
     /**
+     * Returns a copy of this submission with the given fields replaced.
+     * Arguments that are omitted (or null) keep their current value; to clear `archivedAt`, pass `null` explicitly.
+     *
      * @param SubmissionData|array<string, mixed>|null $data
      */
     public function with(
@@ -102,7 +105,7 @@ final readonly class Submission
             $data ?? $this->data,
             $protected ?? $this->protected,
             $this->createdAt,
-            $archivedAt === false ? null : $archivedAt ?? $this->archivedAt,
+            $archivedAt === false ? $this->archivedAt : $archivedAt,
         );
     }
 }
