@@ -39,6 +39,7 @@ Wwwision.Neos.Submissions.SubmissionsModuleController.submissions = NeosBE:Modul
         <NeosBE:Table.Head>
           <NeosBE:Table.Row>
             <NeosBE:Table.HeaderCell attributes.style="width: 1em"/>
+            <NeosBE:Table.HeaderCell content="LLL:submission.form"/>
             <NeosBE:Table.HeaderCell content="LLL:submission.label"/>
             <NeosBE:Table.HeaderCell content="LLL:submission.creationDate"/>
             <NeosBE:Table.HeaderCell/>
@@ -49,6 +50,9 @@ Wwwision.Neos.Submissions.SubmissionsModuleController.submissions = NeosBE:Modul
             <NeosBE:Table.ClickableRow target.action="show" target.arguments={{preset: preset.id.value, id: submission.id.value, filter: filter.array}} attributes.class={submission.protected ? 'submission-protected' : null}>
               <NeosBE:Table.Cell>
                 <NeosBE:Icon icon={submission.protected ? 'lock' : 'envelope-circle-check'}/>
+              </NeosBE:Table.Cell>
+              <NeosBE:Table.Cell attributes.title={'ID: ' + submission.formId}>
+                {String.htmlSpecialChars(submission.formLabel.value)}
               </NeosBE:Table.Cell>
               <NeosBE:Table.Cell>
                 {String.htmlSpecialChars(submission.label.value)}
@@ -73,7 +77,7 @@ Wwwision.Neos.Submissions.SubmissionsModuleController.submissions = NeosBE:Modul
   `
 
   footer = afx`
-    <NeosBE:Button action="download" arguments={{preset: preset.id.value, filter: filter.array}} renderer.linkButton.renderer.href.format="csv" content="LLL:csvDownload" attributes.download={Date.format(Date.now(), 'Ymdhis') + '-' + String.rawUrlEncode(preset.title.value) + (filter.empty ? '' : '-filtered') + '.csv'} icon="download" />
+    <NeosBE:Button @if.hasSubmissions={!submissions.empty} action="download" arguments={{preset: preset.id.value, filter: filter.array}} renderer.linkButton.renderer.href.format="csv" content="LLL:csvDownload" attributes.download={Date.format(Date.now(), 'Ymdhis') + '-' + String.rawUrlEncode(preset.title.value) + (filter.empty ? '' : '-filtered') + '.csv'} icon="download" />
     <NeosBE:Button @if.hasSubmissions={!submissions.empty} content="LLL:deleteAllUnprotected" icon="trash" modal="modal-archive-unprotected" isDangerous={true} />
   `
 }

@@ -24,7 +24,7 @@ final class SubmissionCsvExporter
     /**
      * @var list<string>
      */
-    private const FIXED_COLUMNS = ['id', 'formId', 'presetId', 'label', 'createdAt', 'archivedAt', 'protected'];
+    private const FIXED_COLUMNS = ['id', 'formId', 'formLabel', 'presetId', 'label', 'createdAt', 'archivedAt', 'protected'];
 
     /**
      * Prefix for form field columns whose name collides with one of the {@see self::FIXED_COLUMNS}
@@ -110,6 +110,7 @@ final class SubmissionCsvExporter
         $row = [
             'id' => $submission->id->value,
             'formId' => $submission->formId->value,
+            'formLabel' => $submission->formLabel->value,
             'presetId' => $submission->presetId->value,
             'label' => $submission->label->value,
             'createdAt' => $submission->createdAt->format(DATE_ATOM),
