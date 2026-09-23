@@ -15,7 +15,7 @@ use Wwwision\Neos\Submissions\Model\Submission\Submissions;
 #[CoversClass(SubmissionCsvExporter::class)]
 final class SubmissionCsvExporterTest extends TestCase
 {
-    private const HEADER = 'id,formId,presetId,label,createdAt,archivedAt,protected';
+    private const HEADER = 'id,formId,formLabel,presetId,label,createdAt,archivedAt,protected';
 
     #[Test]
     public function export_of_empty_set_contains_only_the_header(): void
@@ -33,8 +33,8 @@ final class SubmissionCsvExporterTest extends TestCase
 
         self::assertSame([
             self::HEADER . ',name,address.city,newsletter',
-            '0f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b10,form,preset,Label,2026-01-01T00:00:00+00:00,,false,Jane,Berlin,',
-            '1f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b11,form,preset,Label,2026-01-01T00:00:00+00:00,,false,John,,true',
+            '0f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b10,form,"Form label",preset,Label,2026-01-01T00:00:00+00:00,,false,Jane,Berlin,',
+            '1f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b11,form,"Form label",preset,Label,2026-01-01T00:00:00+00:00,,false,John,,true',
         ], $lines);
     }
 
@@ -42,12 +42,12 @@ final class SubmissionCsvExporterTest extends TestCase
     public function export_does_not_let_form_fields_overwrite_fixed_columns(): void
     {
         $lines = self::export(
-            self::submission('0f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b10', ['id' => 'spoofed', 'label' => 'spoofed label']),
+            self::submission('0f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b10', ['id' => 'spoofed', 'formLabel' => 'spoofed', 'label' => 'spoofed label']),
         );
 
         self::assertSame([
-            self::HEADER . ',data.id,data.label',
-            '0f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b10,form,preset,Label,2026-01-01T00:00:00+00:00,,false,spoofed,"spoofed label"',
+            self::HEADER . ',data.id,data.formLabel,data.label',
+            '0f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b10,form,"Form label",preset,Label,2026-01-01T00:00:00+00:00,,false,spoofed,spoofed,"spoofed label"',
         ], $lines);
     }
 
@@ -74,7 +74,7 @@ final class SubmissionCsvExporterTest extends TestCase
         $lines = self::export(self::submission('0f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b10', ['field' => $value]));
 
         $cells = str_getcsv($lines[1], ',', '"', '');
-        self::assertSame($expectedCell, $cells[7]);
+        self::assertSame($expectedCell, $cells[8]);
     }
 
     #[Test]
@@ -83,7 +83,7 @@ final class SubmissionCsvExporterTest extends TestCase
         $lines = self::export(self::submission('0f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b10', ['field' => 'a "quoted", value \\" with backslash']));
 
         self::assertSame(
-            '0f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b10,form,preset,Label,2026-01-01T00:00:00+00:00,,false,"a ""quoted"", value \\"" with backslash"',
+            '0f1b3d3e-7f1b-4a7e-8e6a-3d1c4f2a9b10,form,"Form label",preset,Label,2026-01-01T00:00:00+00:00,,false,"a ""quoted"", value \\"" with backslash"',
             $lines[1],
         );
     }
