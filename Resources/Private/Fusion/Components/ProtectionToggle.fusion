@@ -1,0 +1,31 @@
+# Renders a (POST) form with a button that toggles the "protected" state of a submission
+prototype(Wwwision.Neos.Submissions:ProtectionToggle) < prototype(Neos.Fusion:Component) {
+  preset = null
+  submission = null
+  filter = null
+
+  # name of the action to redirect to after the state has been toggled ("submissions" or "show")
+  returnTo = 'submissions'
+
+  # page of the submissions list to redirect to (only relevant if returnTo is "submissions")
+  page = 1
+
+  # whether to render a label next to the lock icon
+  showLabel = false
+
+  renderer = afx`
+    <Neos.Fusion.Form:Form
+      attributes.class="submission-protection-toggle"
+      form.target.action={props.submission.protected ? 'unprotect' : 'protect'}
+      form.target.arguments={{preset: props.preset.id.value, id: props.submission.id.value, filter: props.filter.array, returnTo: props.returnTo, page: props.page}}
+    >
+      <NeosBE:Button
+        icon={props.submission.protected ? 'lock' : 'lock-open'}
+        isPrimary={props.submission.protected}
+        content={props.showLabel ? (props.submission.protected ? 'LLL:unprotect' : 'LLL:protect') : ''}
+        attributes.title={props.submission.protected ? 'LLL:unprotect.title' : 'LLL:protect.title'}
+        attributes.onclick="event.stopPropagation()"
+      />
+    </Neos.Fusion.Form:Form>
+  `
+}

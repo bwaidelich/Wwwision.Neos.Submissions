@@ -6,12 +6,19 @@ Wwwision.Neos.Submissions.SubmissionsModuleController.show = NeosBE:Module {
     <p><b>ID:</b> {submission.id}</p>
     <p><b>LLL:submission.form:</b> <span title={'ID: ' + submission.formId}>{String.htmlSpecialChars(submission.formLabel.value)}</span> <small>(LLL:submission.preset: <span title={'ID: ' + submission.presetId}>{String.htmlSpecialChars(preset.title.value)}</span>)</small></p>
     <p><b>LLL:submission.creationDate:</b> <Wwwision.Neos.Submissions:Timestamp dateTime={submission.createdAt} /></p>
+    <p><b>LLL:submission.protected:</b> <NeosBE:Icon icon={submission.protected ? 'lock' : 'lock-open'} /> {submission.protected ? 'LLL:yes' : 'LLL:no'} <small @if.isProtected={submission.protected}>(LLL:submission.isProtected)</small></p>
     <p>&nbsp;</p>
     <h2>Daten:</h2>
     <Wwwision.Neos.Submissions:SubmissionData values={submissionData} />
+    <NeosBE:ModalForm @if.isNotProtected={!submission.protected} id="modal-archive-submission" header="LLL:deleteSubmission" cancelButtonText="LLL:cancel" submitButtonIcon="trash" submitButtonText="LLL:delete" isDangerous={true} form.target.action="archive" form.target.arguments={{preset: preset.id.value, id: submission.id.value, filter: filter.array}}>
+      LLL:confirm.deleteSubmission
+      <br/>
+    </NeosBE:ModalForm>
   `
 
   footer = afx`
     <NeosBE:Button action="submissions" arguments={{preset: preset.id.value, filter: filter.array}} content="LLL:back" icon="arrow-left" />
+    <Wwwision.Neos.Submissions:ProtectionToggle preset={preset} submission={submission} filter={filter} returnTo="show" showLabel={true} />
+    <NeosBE:Button @if.isNotProtected={!submission.protected} content="LLL:delete" icon="trash" modal="modal-archive-submission" isDangerous={true} />
   `
 }

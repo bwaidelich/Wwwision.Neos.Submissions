@@ -80,6 +80,80 @@
         <source>Download selected</source>
         <target>Ausgewählte herunterladen</target>
       </trans-unit>
+      <trans-unit id="cancel" xml:space="preserve">
+        <source>Cancel</source>
+        <target>Abbrechen</target>
+      </trans-unit>
+      <trans-unit id="delete" xml:space="preserve">
+        <source>Delete</source>
+        <target>Löschen</target>
+      </trans-unit>
+      <trans-unit id="deleteSubmission" xml:space="preserve">
+        <source>Delete submission</source>
+        <target>Eintrag löschen</target>
+      </trans-unit>
+      <trans-unit id="confirm.deleteSubmission" xml:space="preserve">
+        <source>Do you really want to delete this submission?</source>
+        <target>Soll dieser Eintrag wirklich gelöscht werden?</target>
+      </trans-unit>
+      <trans-unit id="deleteAllUnprotected" xml:space="preserve">
+        <source>Delete all unprotected</source>
+        <target>Alle ungeschützten löschen</target>
+      </trans-unit>
+      <trans-unit id="confirm.deleteAllUnprotected" xml:space="preserve">
+        <source>Do you really want to delete all unprotected submissions of this form type? Protected submissions will be kept.</source>
+        <target>Sollen wirklich alle ungeschützten Einträge dieses Formulartyps gelöscht werden? Geschützte Einträge bleiben erhalten.</target>
+      </trans-unit>
+      <trans-unit id="confirm.deleteAllUnprotectedFiltered" xml:space="preserve">
+        <source>Do you really want to delete all unprotected submissions that match the current filter criteria? Protected submissions will be kept.</source>
+        <target>Sollen wirklich alle ungeschützten Einträge, die den aktuellen Filterkriterien entsprechen, gelöscht werden? Geschützte Einträge bleiben erhalten.</target>
+      </trans-unit>
+      <trans-unit id="protect" xml:space="preserve">
+        <source>Protect</source>
+        <target>Schützen</target>
+      </trans-unit>
+      <trans-unit id="protect.title" xml:space="preserve">
+        <source>Protect this submission from being deleted</source>
+        <target>Eintrag vor dem Löschen schützen</target>
+      </trans-unit>
+      <trans-unit id="unprotect" xml:space="preserve">
+        <source>Remove protection</source>
+        <target>Schutz aufheben</target>
+      </trans-unit>
+      <trans-unit id="unprotect.title" xml:space="preserve">
+        <source>Remove the protection so that this submission can be deleted</source>
+        <target>Schutz aufheben, damit der Eintrag gelöscht werden kann</target>
+      </trans-unit>
+      <trans-unit id="submission.isProtected" xml:space="preserve">
+        <source>This submission is protected and can't be deleted</source>
+        <target>Dieser Eintrag ist geschützt und kann nicht gelöscht werden</target>
+      </trans-unit>
+      <trans-unit id="flashMessage.submissionArchived" xml:space="preserve">
+        <source>The submission has been deleted</source>
+        <target>Der Eintrag wurde gelöscht</target>
+      </trans-unit>
+      <trans-unit id="flashMessage.submissionIsProtected" xml:space="preserve">
+        <source>The submission is protected and can't be deleted</source>
+        <target>Der Eintrag ist geschützt und kann nicht gelöscht werden</target>
+      </trans-unit>
+      <trans-unit id="flashMessage.submissionProtected" xml:space="preserve">
+        <source>The submission is now protected</source>
+        <target>Der Eintrag ist jetzt geschützt</target>
+      </trans-unit>
+      <trans-unit id="flashMessage.submissionUnprotected" xml:space="preserve">
+        <source>The protection of the submission has been removed</source>
+        <target>Der Schutz des Eintrags wurde aufgehoben</target>
+      </trans-unit>
+      <group id="flashMessage.unprotectedSubmissionsArchived" restype="x-gettext-plurals">
+        <trans-unit id="flashMessage.unprotectedSubmissionsArchived[0]" xml:space="preserve">
+          <source>One submission has been deleted</source>
+          <target>Ein Eintrag wurde gelöscht</target>
+        </trans-unit>
+        <trans-unit id="flashMessage.unprotectedSubmissionsArchived[1]" xml:space="preserve">
+          <source>{0} submissions have been deleted</source>
+          <target>{0} Einträge wurden gelöscht</target>
+        </trans-unit>
+      </group>
     </body>
   </file>
 </xliff>

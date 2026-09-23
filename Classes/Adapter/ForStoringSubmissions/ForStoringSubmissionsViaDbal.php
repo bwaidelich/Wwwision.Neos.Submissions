@@ -169,6 +169,7 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select('form_id')
             ->from($this->tableName)
+            ->where('archived_at IS NULL')
             ->groupBy('form_id');
         $result = $queryBuilder->executeQuery();
         return FormIds::fromArray($result->fetchFirstColumn());
@@ -176,6 +177,7 @@ final readonly class ForStoringSubmissionsViaDbal implements ForStoringSubmissio
 
     private function applyFilter(QueryBuilder $queryBuilder, SubmissionFilter $filter): void
     {
+        $queryBuilder->andWhere('archived_at IS NULL');
         if ($filter->formId !== null) {
             $queryBuilder
                 ->andWhere('form_id = :formId')

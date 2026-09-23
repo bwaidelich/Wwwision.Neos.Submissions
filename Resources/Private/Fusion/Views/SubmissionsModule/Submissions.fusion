@@ -46,9 +46,9 @@ Wwwision.Neos.Submissions.SubmissionsModuleController.submissions = NeosBE:Modul
         </NeosBE:Table.Head>
         <NeosBE:Table.Body>
           <Neos.Fusion:Loop items={submissions} itemName="submission">
-            <NeosBE:Table.ClickableRow target.action="show" target.arguments={{preset: preset.id.value, id: submission.id.value, filter: filter.array}}>
+            <NeosBE:Table.ClickableRow target.action="show" target.arguments={{preset: preset.id.value, id: submission.id.value, filter: filter.array}} attributes.class={submission.protected ? 'submission-protected' : null}>
               <NeosBE:Table.Cell>
-                <NeosBE:Icon icon="envelope-circle-check"/>
+                <NeosBE:Icon icon={submission.protected ? 'lock' : 'envelope-circle-check'}/>
               </NeosBE:Table.Cell>
               <NeosBE:Table.Cell>
                 {String.htmlSpecialChars(submission.label.value)}
@@ -57,6 +57,7 @@ Wwwision.Neos.Submissions.SubmissionsModuleController.submissions = NeosBE:Modul
                 <Wwwision.Neos.Submissions:Timestamp dateTime={submission.createdAt} />
               </NeosBE:Table.Cell>
               <NeosBE:Table.ActionCell>
+                <Wwwision.Neos.Submissions:ProtectionToggle preset={preset} submission={submission} filter={filter} page={Math.floor(pagination.offset / pagination.resultsPerPage) + 1} />
                 <NeosBE:Button icon="eye" action="show" arguments={{preset: preset.id.value, id: submission.id.value, filter: filter.array}}/>
               </NeosBE:Table.ActionCell>
             </NeosBE:Table.ClickableRow>
@@ -64,10 +65,15 @@ Wwwision.Neos.Submissions.SubmissionsModuleController.submissions = NeosBE:Modul
         </NeosBE:Table.Body>
       </NeosBE:Table>
       <NeosBE:Pagination numberOfResults={submissions.totalCount} resultsPerPage={pagination.resultsPerPage} />
+      <NeosBE:ModalForm id="modal-archive-unprotected" header="LLL:deleteAllUnprotected" cancelButtonText="LLL:cancel" submitButtonIcon="trash" submitButtonText="LLL:deleteAllUnprotected" isDangerous={true} form.target.action="archiveUnprotected" form.target.arguments={{preset: preset.id.value, filter: filter.array}}>
+        {filter.empty ? 'LLL:confirm.deleteAllUnprotected' : 'LLL:confirm.deleteAllUnprotectedFiltered'}
+        <br/>
+      </NeosBE:ModalForm>
     </Neos.Fusion:Fragment>
   `
 
   footer = afx`
     <NeosBE:Button action="download" arguments={{preset: preset.id.value, filter: filter.array}} renderer.linkButton.renderer.href.format="csv" content="LLL:csvDownload" attributes.download={Date.format(Date.now(), 'Ymdhis') + '-' + String.rawUrlEncode(preset.title.value) + (filter.empty ? '' : '-filtered') + '.csv'} icon="download" />
+    <NeosBE:Button @if.hasSubmissions={!submissions.empty} content="LLL:deleteAllUnprotected" icon="trash" modal="modal-archive-unprotected" isDangerous={true} />
   `
 }

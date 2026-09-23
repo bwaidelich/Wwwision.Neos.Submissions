@@ -8,7 +8,7 @@
 * Every preset stores its submissions in a **dedicated database table** that is created and migrated via a CLI command
 * The package ships a **Fusion.Form action** (`Wwwision.Neos.Submissions:StoreSubmission`) that persists the submitted form data as JSON
 * Each submission gets a **label** (e.g. "Doe, John (john@example.com)") and a **form label** (e.g. the title of the document containing the form) that are generated via configurable Eel expressions
-* The **backend module** lists submissions per preset, allows to filter them by form and search term, shows the details of a single submission and exports the current selection as CSV file
+* The **backend module** lists submissions per preset, allows to filter them by form and search term, shows the details of a single submission, exports the current selection as CSV file and allows to protect and delete submissions
 * **CLI commands** allow to set up the storage, export submissions and re-generate labels
 
 # Usage
@@ -229,6 +229,11 @@ The "Submissions" module underneath the "Administration" main module provides:
 * A paginated **list** of submissions with label and creation date
 * A **detail view** rendering the submitted data (including nested values, dates and booleans)
 * A **CSV download** of all submissions matching the current filter
+* **Protection** of single submissions (lock icon in the list and detail view). Protected submissions are highlighted in the list and can't be deleted
+* **Deletion** of a single (unprotected) submission in the detail view and of all unprotected submissions matching the current filter in the list view (after confirmation)
+
+> [!NOTE]
+> Submissions are never removed from the database by the module. "Deleting" a submission sets its `archivedAt` timestamp instead – archived submissions are excluded from the module, the CSV export and the CLI commands
 
 The CSV export contains the fixed columns `id`, `formId`, `presetId`, `label`, `createdAt`, `archivedAt` and `protected` followed by one column per (flattened) form field. Submitted form fields that happen to have the same name as a fixed column are exported with a `data.` prefix.
 
@@ -269,7 +274,7 @@ $service->handleAddSubmission(AddSubmission::create(
 ));
 ```
 
-The same service provides `findSubmissions()`, `getSubmission()` and `findForms()` to read data.
+The same service provides `handleArchiveSubmission()`, `handleArchiveUnprotectedSubmissions()`, `handleProtectSubmission()` and `handleUnprotectSubmission()` to change submissions as well as `findSubmissions()`, `getSubmission()` and `findForms()` to read data (archived submissions are excluded).
 
 # Storage
 
@@ -283,9 +288,9 @@ Submissions are stored via Doctrine DBAL in one table per preset, using the defa
 | `form_label`  | generated form label                                           |
 | `label`       | generated submission label                                     |
 | `data`        | submitted data as JSON                                         |
-| `protected`   | flag reserved for future use (currently always `false`)        |
+| `protected`   | whether the submission is protected from being deleted         |
 | `created_at`  | creation timestamp (UTC, `DATE_ATOM` format)                   |
-| `archived_at` | archival timestamp reserved for future use (currently `NULL`)  |
+| `archived_at` | archival ("deletion") timestamp, `NULL` if not archived        |
 
 A different storage can be provided by implementing the `ForStoringSubmissions` port and a corresponding `ForStoringSubmissionsFactory`, and wiring it to the `FormSubmissionServiceFactory` via `Objects.yaml`.
 
