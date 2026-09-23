@@ -61,6 +61,62 @@
       <trans-unit id="csvDownload" xml:space="preserve">
         <source>Download selected</source>
       </trans-unit>
+      <trans-unit id="cancel" xml:space="preserve">
+        <source>Cancel</source>
+      </trans-unit>
+      <trans-unit id="delete" xml:space="preserve">
+        <source>Delete</source>
+      </trans-unit>
+      <trans-unit id="deleteSubmission" xml:space="preserve">
+        <source>Delete submission</source>
+      </trans-unit>
+      <trans-unit id="confirm.deleteSubmission" xml:space="preserve">
+        <source>Do you really want to delete this submission?</source>
+      </trans-unit>
+      <trans-unit id="deleteAllUnprotected" xml:space="preserve">
+        <source>Delete all unprotected</source>
+      </trans-unit>
+      <trans-unit id="confirm.deleteAllUnprotected" xml:space="preserve">
+        <source>Do you really want to delete all unprotected submissions of this form type? Protected submissions will be kept.</source>
+      </trans-unit>
+      <trans-unit id="confirm.deleteAllUnprotectedFiltered" xml:space="preserve">
+        <source>Do you really want to delete all unprotected submissions that match the current filter criteria? Protected submissions will be kept.</source>
+      </trans-unit>
+      <trans-unit id="protect" xml:space="preserve">
+        <source>Protect</source>
+      </trans-unit>
+      <trans-unit id="protect.title" xml:space="preserve">
+        <source>Protect this submission from being deleted</source>
+      </trans-unit>
+      <trans-unit id="unprotect" xml:space="preserve">
+        <source>Remove protection</source>
+      </trans-unit>
+      <trans-unit id="unprotect.title" xml:space="preserve">
+        <source>Remove the protection so that this submission can be deleted</source>
+      </trans-unit>
+      <trans-unit id="submission.isProtected" xml:space="preserve">
+        <source>This submission is protected and can't be deleted</source>
+      </trans-unit>
+      <trans-unit id="flashMessage.submissionArchived" xml:space="preserve">
+        <source>The submission has been deleted</source>
+      </trans-unit>
+      <trans-unit id="flashMessage.submissionIsProtected" xml:space="preserve">
+        <source>The submission is protected and can't be deleted</source>
+      </trans-unit>
+      <trans-unit id="flashMessage.submissionProtected" xml:space="preserve">
+        <source>The submission is now protected</source>
+      </trans-unit>
+      <trans-unit id="flashMessage.submissionUnprotected" xml:space="preserve">
+        <source>The protection of the submission has been removed</source>
+      </trans-unit>
+      <group id="flashMessage.unprotectedSubmissionsArchived" restype="x-gettext-plurals">
+        <trans-unit id="flashMessage.unprotectedSubmissionsArchived[0]" xml:space="preserve">
+          <source>One submission has been deleted</source>
+        </trans-unit>
+        <trans-unit id="flashMessage.unprotectedSubmissionsArchived[1]" xml:space="preserve">
+          <source>{0} submissions have been deleted</source>
+        </trans-unit>
+      </group>
     </body>
   </file>
 </xliff>

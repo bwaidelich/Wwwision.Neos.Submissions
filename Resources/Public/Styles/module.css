@@ -12,3 +12,13 @@
   margin-right: 2em;
   text-align: right;
 }
+.neos .submission-protection-toggle {
+  display: inline-block;
+  margin: 0;
+}
+.neos .neos-module-content tr.submission-protected td {
+  background-color: rgba(0, 173, 238, 0.15);
+}
+.neos .neos-module-content tr.submission-protected:hover td {
+  background-color: rgba(0, 173, 238, 0.3);
+}
